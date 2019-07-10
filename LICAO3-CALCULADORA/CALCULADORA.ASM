@@ -1,3 +1,4 @@
+BuildMsx 	equ 1 ; COMPILAR PARA MSX
 ; ===============================================================
 ; LICAO 3 - ASM Z80 
 ; ===============================================================
@@ -28,7 +29,7 @@ MATHADD:
 MATHMULT:
 		LD A,B
 		CP 0
-		JR SAVERESULT
+		JR Z,SAVERESULT
 		LD A,0
 MATHMULTAGAIN:
 		ADD C
