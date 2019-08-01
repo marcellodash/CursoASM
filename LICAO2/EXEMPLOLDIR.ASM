@@ -1,12 +1,14 @@
-org &8000	
-	;LDIR => 	COPIA O CONTEUDO DO ENDERECO ESPECIFICADO EM HL 
-	;		PARA O ENDERECO INDICADO EM DE
-	; 		UM NUMERO DE BYTES INDICADOS EM BC
-	; 
-	ld hl,&0000
-	ld de,&C000 ; MSX=&C000
-	ld bc,&4000 ; MSX=&1000
+screensize 	equ &4000
+org &8100	
+	ld a, %000111
+fillAgain:
+	ld hl,&C000
+	ld de,&C000+1 
+	ld bc,screensize-1 
+	ld (hl), a
 	ldir 
+	dec a
+	cp 255
+	jp nz, fillAgain
 ret
- 
 	
