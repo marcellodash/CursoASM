@@ -1,0 +1,48 @@
+;================================================================
+; Bit Shifts
+; RR A => ROTACIONA PARA DIREITA COM CARRO 
+; RRC A => ROTACIONA PARA DIREITA COM WRAP; 
+; SRA A => MOVE BIT PARA DIREITA (TOP BIT = TOP BIT ANTERIOR)
+; SRL A => MOVE BIT PARA DIREITA (TOP BIT = 0)
+; RL A => ROTACIONA PARA ESQUERDA COM CARRO 
+; RLC A => ROTACIONA PARA ESQUERDA COM WRAP; 
+; SLA A => MOVE BIT PARA ESQUERDA (BOTTOM BIT = 0)
+; SLL A => MOVE BIT PARA ESQUERDA (BOTTOM BIT = 1) 
+;================================================================
+ORG &8000
+	LD HL, &C000	;COMECAMOS NA MEMORIA DE VIDEO DO AMSTRAD
+Again:
+	ld a, (hl)
+	RR A
+	;RRC A
+	;SRA A
+	;srl a
+	ld (hl), a
+	inc l
+	jp nz, Again
+	inc h
+	jp nz, Again
+ret
+
+ORG &8100
+	LD HL, &FF00 	;COMECAMOS COM 00 PQ AO ROLAR O DEC, 
+			;ELE IRA PARA FF
+Again2:
+	ld a, (hl)
+	;RL A
+	;RLC A          ;PODE SER USADO PARA CONVERTER UM NUMERO 
+			;MUITO PEQUENO EM UM NUMERO MUITO GRANDE
+	SLA A
+	;SLL A
+	ld (hl), a
+	DEC L
+	jp nz, Again2
+	DEC H
+	LD A,H
+	CP &BF		; COMPARAMOS COM BF PQ ESTAMOS ANDANDO 
+			; NA MEMORIA DE VIDEO DE TRAS PARA FRENTE
+			; ENTAO QUEREMOS QUE O LOOP PARE IMEDIATAMENTE 
+			; APOS &C000 (MEMORIA DE VIDEO DO AMSTRAD
+	jp nz, Again2
+ret
+

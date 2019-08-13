@@ -1,0 +1,50 @@
+;================================================================================
+; SELF MODIFYING CODE 
+; CALL &8000,&<OPCAO><MASCARA>
+; CALL &8000,&01F0 (FAZ UM AND COM MASCARA F0)
+; CALL &8000,&02F0 (FAZ UM OR COM MASCARA F0)
+; CALL &8000,&03F0 (FAZ UM XOR COM MASCARA F0)
+;================================================================================
+ORG &8000
+	CP 1
+	RET NZ
+	LD A, (IX+1)
+
+	LD HL,SMAND	;VOCE PODE DEIXAR O CODIGO MAIS RAPIDO E ENXUTO 
+			;USANDO O CODIGO DA INSTRUCAO DIRETAMENTE, &E6 
+	CP 1
+	JR Z,START
+
+	LD HL, SMOR	;OR = &F6
+	CP 2
+	JR Z, START
+	
+	LD HL, SMXOR	;XOR = &EE
+	CP 3
+	JR Z, START
+
+START:
+	LD A,(HL)
+	LD (SELFMODIFY),A
+	LD A,(IX+0)
+	LD (SELFMODIFY+1),A
+	LD HL, &C000
+AGAIN:
+	LD A,(HL)
+SELFMODIFY:
+	NOP
+	NOP
+	LD (HL),A
+	INC L
+	JP NZ, AGAIN
+	INC H
+	JP NZ, AGAIN
+RET
+
+SMAND: 	AND 1 	; OPCAO 1
+SMOR:	OR 1	; OPCAO 2
+SMXOR:	XOR 1	; OPCAO 3
+
+	
+		
+	
