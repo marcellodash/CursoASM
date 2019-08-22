@@ -1,0 +1,4 @@
+ORG &8000
+	LD A,R
+	LD I,A
+RET  
