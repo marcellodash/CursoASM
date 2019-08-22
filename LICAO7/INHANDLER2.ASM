@@ -70,36 +70,32 @@ InterruptHandler:
 	ld hl,RasterColors
 
 InterruptHandlerOk:
-	;Define that we're changing COLOR 0
-	;B=&7F 	Gate Array port
-	;C=0	Set color Number (0)
-	ld bc,&7f00      
-	out (c),c   	;On the CPC and spectrun this is actually Out (B),C
 
-	outi		;OUTI does not work right on the CPC
-	inc b		;So we need to do INC B
-	
-	inc c		;inc C - to change the next color
-	out (c),c	;Set the Color number
+	ld bc,&7f00		; DEFINE A COR DA CANETA COMO 0
+				; B=&7F	Gate Array port
+				; C=0 COR 
+	out (c),c   		; EQUIVALE A Out (B),C
+	outi			; OUTI EH BUGADO NO CPC ENTAO
+	inc b			; PRECISAMOS INCREMENTAR B NA MAO	
 
-	outi		;OUTI does not work right on the CPC
-	inc b		;So we need to do INC B
-	
-	inc c		;inc C - to change the next color
-	out (c),c	;Set the Color number
+	inc c			; AUMENTA C PARA MUDAR A COR DA PEN
+	out (c),c		; SETA A COR 1
+	outi			; OUTI EH BUGADO NO CPC ENTAO
+	inc b			; PRECISAMOS INCREMENTAR B NA MAO	
 
-	outi		;OUTI does not work right on the CPC
-	inc b		;So we need to do INC B
-	
-	inc c		;inc C - to change the next color
-	out (c),c	;Set the Color number
+	inc c			; AUMENTA C PARA MUDAR A COR DA PEN
+	out (c),c		; SETA A COR 2
+	outi			; OUTI EH BUGADO NO CPC ENTAO
+	inc b			; PRECISAMOS INCREMENTAR B NA MAO	
 
-	outi		;OUTI does not work right on the CPC
+	inc c			; AUMENTA C PARA MUDAR A COR DA PEN
+	out (c),c		; SETA A COR 3
+	outi			
 
 	ld (IH_RasterColor_Plus2-2),hl
-	ex af,af';Restore the normal registers
-	exx
-	ei	;We've handled the intterupt - so turn interrupts back on
+	ex af,af'		; RESTAURA OS REGISTRADORES AO VALOR NORMAL
+	exx			; RESTAURA OS REGISTRADORES AO VALOR NORMAL
+	ei			; TERMINAMOS DE GERENCIAR A INTERRUPCAO
 ret
 
 
