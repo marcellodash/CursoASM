@@ -24,7 +24,7 @@ SaveScreen:
 		ld de, &4000	; posicao da memoria onde fica 
 				; o banco extra do amstrad cpc 
 		ld bc, &4000	; tamanho aproxido da memoria de video
-		ldir		; copia para o banco extra de memoria
+		call UseLdi	; copia para o banco extra de memoria
 				; que comeca em &4000
 		ld a,&c0	; retorna para pagina 0
 		call BankSwitch
@@ -42,7 +42,7 @@ LoadScreen:
 		ld de, &c000 	; Grava na memoria de video
 		ld hl, &4000	; Le do banco auxiliar
 		ld bc, &4000
-		ldir
+		call UseLdi
 		ld a,&c0
 		call BankSwitch
 	ei 
@@ -52,4 +52,28 @@ BankSwitch:
 	ld b,&7f 		; endereco de memoria do gateway	
 	out (c), a		; troca o banco de memoria
 ret 
+
+UseLdi:
+	ldi			; chamar ldi 16 vezes eh mais 
+	ldi			; e testar b apenas no final eh
+	ldi			; mais rapido que testar b a cada
+	ldi			; copia realizada por ldir
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ldi
+	ret po
+jp UseLdi
+
+
+
+
 ;======================================================================
